@@ -1,0 +1,74 @@
+services:
+  windows:
+    image: noodle/windows
+    #image: dockurr/windows
+    container_name: win10
+    environment:
+      ARGUMENTS: "-usb -device usb-host,vendorid=0x04f9,productid=0x01e7 -usb -device usb-host,vendorid=0x0b95,productid=0x1790"
+      LANGUAGE: "chinese"
+      VERSION: "custom"
+      DISK_SIZE: "256G"
+      CPU_CORES: "4"
+      RAM_SIZE: "10G"
+      NETWORK: "user"
+        # USER_PORTS: "49668,5354,631"
+        # HV: "N"
+        # BOOT_MODE: "windows_plain"
+        # CONSOLE: "Y"
+      DEBUG: "Y"
+    privileged: true 
+    devices:
+      - /dev/kvm
+      - /dev/bus/usb
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+        #networks:
+        #  host_bridge:
+        #    ipv4_address: 192.168.10.32
+        #  default:
+    ports:
+      # - 135:1135/tcp
+      # - 135:1135/udp
+      # - 137:1137/tcp
+      # - 137:1137/udp
+      # - 138:1138/tcp
+      # - 138:1138/udp
+      # - 139:1139/tcp
+      # - 139:1139/udp
+      # - 445:1445/tcp
+      # - 445:1445/udp
+      # - 5353:5353/tcp
+      # - 5353:5353/udp
+      - 8006:8006
+      - 3389:3389/tcp
+      - 3389:3389/udp
+      # - 49668:49668
+      # - 5354:5354
+      # - 631:631
+    volumes:
+      - /data/shared/iso/virtio-win-0.1.262.iso:/drivers.iso
+      - /data/win10/storage:/storage
+      - /data/shared:/shared
+      #- /sys/class/net/tap0:/sys/class/net/tap0
+      #- /sys/devices/virtual/net/tap0:/sys/devices/virtual/net/tap0
+      #- /data/shared/iso/tiny10_x64_23h2.iso:/custom.iso
+      #- /data/win10/run:/run
+    stop_grace_period: 2m
+    restart: always
+      #entrypoint: tail -f /dev/null
+     
+#networks:
+#  host_bridge:
+#    driver: macvlan
+#    driver_opts:
+#      parent: eno1  # 指定物理接口
+#    ipam:
+#      config:
+#        - subnet: 192.168.10.0/24
+#          gateway: 192.168.10.1
+#
+#  default:
+#    driver: bridge
+
